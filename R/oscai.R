@@ -14,8 +14,8 @@
 #' @export
 
 oscai <- function(df, item, answer, model = c("ada", "babbage", "curie", "davinci"), scores_col = ".originality") {
-    item <- rlang::enquo(item)
-    answer <- rlang::enquo(answer)
+    item <- rlang::ensym(item)
+    answer <- rlang::ensym(answer)
     model <- rlang::arg_match(model)
 
     model <- switch(model,
