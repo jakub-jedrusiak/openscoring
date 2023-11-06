@@ -32,10 +32,12 @@ devtools::install_github("jakub-jedrusiak/openscoring")
 ```{r example}
 library(openscoring)
 
-df <- data.frame(
+df <- tibble::tibble(
   stimulus = c("brick", "hammer", "sponge"),
   response = c("butter for trolls", "make Thor jeallous", "make it play in a kids show")
 )
 
-oscai(df, stimulus, response)
+scored_df <- oscai(df, stimulus, response, model = "curie")
+
+scored_df
 ```
