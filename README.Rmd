@@ -1,0 +1,41 @@
+---
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%"
+)
+```
+
+# openscoring
+
+<!-- badges: start -->
+<!-- badges: end -->
+
+## Installation
+
+You can install the development version of openscoring from [GitHub](https://github.com/) with:
+
+``` r
+# install.packages("devtools")
+devtools::install_github("jakub-jedrusiak/openscoring")
+```
+
+## Example
+
+```{r example}
+library(openscoring)
+
+df <- data.frame(
+  stimulus = c("brick", "hammer", "sponge"),
+  response = c("butter for trolls", "make Thor jeallous", "make it play in a kids show")
+)
+
+oscai(df, stimulus, response)
+```
