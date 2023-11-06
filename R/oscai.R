@@ -1,4 +1,15 @@
 #' @title Score with an AI
+#' A basic function to score the creativity with an AI.
+#' See [the OpenScoring site](https://openscoring.du.edu/scoringllm)
+#' for more information. Requires an internet connection.
+#'
+#' @param df A data frame.
+#' @param item The column name of the items or other kind of prompt.
+#' @param answer The column name of the responses. Commas will be replaced with spaces for scoring.
+#' @param model The model to use. Can be one of "ada", "babbage", "curie", or "davinci".
+#' @param scores_col The column name to store the scores in. Defaults to ".originality".
+#'
+#' @return The input data frame with the scores added.
 #'
 #' @export
 

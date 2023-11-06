@@ -2,7 +2,10 @@
 % Please edit documentation in R/oscai.R
 \name{oscai}
 \alias{oscai}
-\title{Score with an AI}
+\title{Score with an AI
+A basic function to score the creativity with an AI.
+See \href{https://openscoring.du.edu/scoringllm}{the OpenScoring site}
+for more information. Requires an internet connection.}
 \usage{
 oscai(
   df,
@@ -12,6 +15,23 @@ oscai(
   scores_col = ".originality"
 )
 }
+\arguments{
+\item{df}{A data frame.}
+
+\item{item}{The column name of the items or other kind of prompt.}
+
+\item{answer}{The column name of the responses. Commas will be replaced with spaces for scoring.}
+
+\item{model}{The model to use. Can be one of "ada", "babbage", "curie", or "davinci".}
+
+\item{scores_col}{The column name to store the scores in. Defaults to ".originality".}
+}
+\value{
+The input data frame with the scores added.
+}
 \description{
 Score with an AI
+A basic function to score the creativity with an AI.
+See \href{https://openscoring.du.edu/scoringllm}{the OpenScoring site}
+for more information. Requires an internet connection.
 }
