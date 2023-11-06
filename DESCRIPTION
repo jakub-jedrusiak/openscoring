@@ -38,7 +38,7 @@ Authors@R: c(
     ),
     person(
         "Kelly", "Berthiaume",
-        role = "ctb"
+        role = "ctb",
         comment = c(
             ORCID = "0000-0002-5285-0512",
             affiliation = "University of North Texas"
@@ -51,5 +51,11 @@ Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.3
 Imports: 
+    cli,
+    glue,
     httr,
-    jsonlite
+    jsonlite,
+    lifecycle,
+    rlang,
+    stringr,
+    withr
