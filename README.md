@@ -8,10 +8,12 @@
 [![R-CMD-check](https://github.com/jakub-jedrusiak/openscoring/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/jakub-jedrusiak/openscoring/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
-A simple package to score creativity data using
-[OpenScoring](https://openscoring.du.edu/) API. Based on paper by
-Organisciak, Acar, Dumas and Berthiaume
-([2022](https://doi.org/10.13140/RG.2.2.32393.31840)).
+Creativity research involves the need to score open-ended problems.
+Usually done by humans, automatic scoring using AI becomes more and more
+accurate. This package provides a simple interface to the ‘Open Scoring’
+API, leading creativity scoring technology by Organiscak et
+al. ([2023](https://doi.org/10.1016/j.tsc.2023.101356)). With it, you
+can score your own data directly from an R script.
 
 ## Installation
 
