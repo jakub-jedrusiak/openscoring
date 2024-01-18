@@ -6,23 +6,22 @@
 #' @param df A data frame.
 #' @param item The column name of the items or other kind of prompt.
 #' @param answer The column name of the responses. Commas will be replaced with spaces for scoring.
-#' @param model The model to use. Can be one of "ada", "babbage", "curie", or "davinci".
+#' @param model The model to use. Can be one of "chatgpt", "babbage2", "davinci2".
 #' @param scores_col The column name to store the scores in. Defaults to ".originality".
 #'
 #' @return The input data frame with the scores added.
 #'
 #' @export
 
-oscai <- function(df, item, answer, model = c("ada", "babbage", "curie", "davinci"), scores_col = ".originality") {
+oscai <- function(df, item, answer, model = c("chatgpt", "babbage2", "davinci2"), scores_col = ".originality") {
     item <- rlang::ensym(item)
     answer <- rlang::ensym(answer)
     model <- rlang::arg_match(model)
 
     model <- switch(model,
-        ada = "gpt-ada-paper",
-        babbage = "gpt-babbage-paper",
-        curie = "gpt-curie-paper",
-        davinci = "gpt-davinci-paper_alpha"
+        chatgpt = "ocsai-chatgpt",
+        babbage2 = "ocsai-babbage2",
+        davinci2 = "ocsai-davinci2"
     )
 
     item <- df[[rlang::as_label(item)]]
