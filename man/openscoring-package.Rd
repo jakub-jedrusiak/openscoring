@@ -6,7 +6,7 @@
 \alias{openscoring-package}
 \title{openscoring: Open Scoring R Package}
 \description{
-This package can be used to score creativity data using Open Scoring platform (Organiscak et al., 2023) API.
+Score creativity data using Open Scoring platform (Organiscak et al., 2023) API.
 }
 \author{
 \strong{Maintainer}: Jakub Jędrusiak \email{kuba23031999@gmail.com} (\href{https://orcid.org/0000-0002-6481-8210}{ORCID}) (University of Wroclaw) [copyright holder]

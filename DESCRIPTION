@@ -1,6 +1,6 @@
 Package: openscoring
 Title: Open Scoring R Package
-Version: 0.0.0.9000
+Version: 1.0.0
 Authors@R: c(
     person(
         "Jakub", "Jędrusiak",
@@ -45,7 +45,7 @@ Authors@R: c(
         )
     )
     )
-Description: This package can be used to score creativity data using Open Scoring platform (Organiscak et al., 2023) API.
+Description: Score creativity data using Open Scoring platform (Organiscak et al., 2023) API.
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)

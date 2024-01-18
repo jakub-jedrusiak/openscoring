@@ -35,3 +35,12 @@ A basic function to score the creativity with an AI.
 See \href{https://openscoring.du.edu/scoringllm}{the OpenScoring site}
 for more information. Requires an internet connection.
 }
+\examples{
+df <- data.frame(
+  stimulus = c("brick", "hammer", "sponge"),
+  response = c("butter for trolls", "make Thor jeallous", "make it play in a kids show")
+)
+
+df <- oscai(df, stimulus, response, model = "davinci2")
+
+}

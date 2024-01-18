@@ -10,6 +10,14 @@
 #' @param scores_col The column name to store the scores in. Defaults to ".originality".
 #'
 #' @return The input data frame with the scores added.
+#' 
+#' @examples
+#' df <- data.frame(
+#'   stimulus = c("brick", "hammer", "sponge"),
+#'   response = c("butter for trolls", "make Thor jeallous", "make it play in a kids show")
+#' )
+#' 
+#' df <- oscai(df, stimulus, response, model = "davinci2")
 #'
 #' @export
 
