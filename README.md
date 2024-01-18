@@ -6,6 +6,7 @@
 <!-- badges: start -->
 
 [![R-CMD-check](https://github.com/jakub-jedrusiak/openscoring/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/jakub-jedrusiak/openscoring/actions/workflows/R-CMD-check.yaml)
+![CRAN/METACRAN Version](https://img.shields.io/cran/v/openscoring)
 <!-- badges: end -->
 
 Creativity research involves the need to score open-ended problems.
