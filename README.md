@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# openscoring
+# Open Scoring API Client for R
 
 <!-- badges: start -->
 
