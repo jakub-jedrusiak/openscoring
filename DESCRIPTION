@@ -57,5 +57,4 @@ Imports:
     jsonlite,
     lifecycle,
     rlang,
-    stringr,
-    withr
+    stringr

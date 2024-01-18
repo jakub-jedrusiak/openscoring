@@ -1,2 +1,9 @@
 ^LICENSE\.md$
 ^README\.Rmd$
+^.*\.Rproj$
+^\.Rproj\.user$
+^\.github$
+.lintr
+.devcontainer
+.vscode
+^cran-comments\.md$
