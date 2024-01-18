@@ -7,3 +7,4 @@
 .devcontainer
 .vscode
 ^cran-comments\.md$
+^CRAN-SUBMISSION$
