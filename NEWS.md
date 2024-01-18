@@ -1,5 +1,3 @@
-# openscoring 2.0.0
-
-# openscoring
+# openscoring 1.0.0
 
 * Initial CRAN submission.
