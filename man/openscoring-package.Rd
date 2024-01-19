@@ -4,7 +4,7 @@
 \name{openscoring-package}
 \alias{openscoring}
 \alias{openscoring-package}
-\title{openscoring: Open Scoring API Client}
+\title{openscoring: 'Open Scoring' API Client}
 \description{
 Creativity research involves the need to score open-ended problems. Usually done by humans, automatic scoring using AI becomes more and more accurate. This package provides a simple interface to the 'Open Scoring' API \url{https://openscoring.du.edu/docs}, leading creativity scoring technology by Organiscak et al. (2023) \doi{10.1016/j.tsc.2023.101356}. With it, you can score your own data directly from an R script.
 }
@@ -16,6 +16,7 @@ Other contributors:
   \item Peter Organisciak \email{peter.organisciak@du.edu} (\href{https://orcid.org/0000-0002-9058-2280}{ORCID}) (University of Denver) [contributor]
   \item Selcuk Acar (\href{https://orcid.org/0000-0003-4044-985X}{ORCID}) (University of North Texas) [contributor]
   \item Denis Dumas (\href{https://orcid.org/0000-0002-8446-4720}{ORCID}) (University of Georgia) [contributor]
+  \item Pier-Luc de Chantal (\href{https://orcid.org/0000-0002-6974-6172}{ORCID}) (Université du Québec à Montréal) [contributor]
   \item Kelly Berthiaume (\href{https://orcid.org/0000-0002-5285-0512}{ORCID}) (University of North Texas) [contributor]
 }
 

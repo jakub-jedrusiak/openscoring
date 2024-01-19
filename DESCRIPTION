@@ -1,5 +1,5 @@
 Package: openscoring
-Title: Open Scoring API Client
+Title: 'Open Scoring' API Client
 Version: 1.0.0
 Authors@R: c(
     person(
@@ -35,6 +35,14 @@ Authors@R: c(
             ORCID = "0000-0002-8446-4720",
             affiliation = "University of Georgia"
         )
+    ),
+    person(
+      "Pier-Luc", "de Chantal",
+      role = "ctb",
+      comment = c(
+        ORCID = "0000-0002-6974-6172",
+        affiliation = "Université du Québec à Montréal"
+      )
     ),
     person(
         "Kelly", "Berthiaume",
