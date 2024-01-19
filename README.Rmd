@@ -18,7 +18,7 @@ knitr::opts_chunk$set(
 <!-- badges: start -->
 [![R-CMD-check](https://github.com/jakub-jedrusiak/openscoring/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/jakub-jedrusiak/openscoring/actions/workflows/R-CMD-check.yaml)
 ![CRAN/METACRAN Version](https://img.shields.io/cran/v/openscoring)
-[![codecov](https://app.codecov.io/gh/jakub-jedrusiak/openscoring/graph/badge.svg?token=nH9qzHWEqR)](https://app.codecov.io/gh/jakub-jedrusiak/openscoring)
+[![codecov](https://codecov.io/gh/jakub-jedrusiak/openscoring/branch/main/graph/badge.svg?token=nH9qzHWEqR)](https://app.codecov.io/gh/jakub-jedrusiak/openscoring)
 <!-- badges: end -->
 
 Creativity research involves the need to score open-ended problems. Usually done by humans, automatic scoring using AI becomes more and more accurate. This package provides a simple interface to the 'Open Scoring' API, leading creativity scoring technology by Organiscak et al. ([2023](https://doi.org/10.1016/j.tsc.2023.101356)). With it, you can score your own data directly from an R script.
