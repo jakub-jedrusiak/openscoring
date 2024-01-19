@@ -7,7 +7,7 @@
 
 [![R-CMD-check](https://github.com/jakub-jedrusiak/openscoring/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/jakub-jedrusiak/openscoring/actions/workflows/R-CMD-check.yaml)
 ![CRAN/METACRAN Version](https://img.shields.io/cran/v/openscoring)
-[![codecov](https://codecov.io/gh/jakub-jedrusiak/openscoring/graph/badge.svg?token=nH9qzHWEqR)](https://codecov.io/gh/jakub-jedrusiak/openscoring)
+[![codecov](https://app.codecov.io/gh/jakub-jedrusiak/openscoring/graph/badge.svg?token=nH9qzHWEqR)](https://app.codecov.io/gh/jakub-jedrusiak/openscoring)
 <!-- badges: end -->
 
 Creativity research involves the need to score open-ended problems.
