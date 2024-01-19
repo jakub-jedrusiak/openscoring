@@ -14,7 +14,7 @@
 #' @examples
 #' df <- data.frame(
 #'   stimulus = c("brick", "hammer", "sponge"),
-#'   response = c("butter for trolls", "make Thor jeallous", "make it play in a kids show")
+#'   response = c("butter for trolls", "make Thor jealous", "make it play in a kids show")
 #' )
 #' 
 #' df <- oscai(df, stimulus, response, model = "davinci2")
