@@ -52,7 +52,7 @@ oscai <- function(df, item, answer, model = c("chatgpt", "babbage2", "davinci2")
     cli::cli_abort("OpenScoring API returned status code {res$status_code}\n\n{res}")
   }
 
-  content <- jsonlite::fromJSON(rawToChar(res$content))
+  content <- jsonlite::fromJSON(stringr::str_replace_all(rawToChar(res$content), "NaN", "\"NA\""))
 
   if (!quiet) {
     cli::cli_inform(c("v" = "Remember to cite:\n\n{content$cite}"))
