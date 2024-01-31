@@ -12,7 +12,8 @@ oscai(
   item,
   answer,
   model = c("chatgpt", "babbage2", "davinci2"),
-  scores_col = ".originality"
+  scores_col = ".originality",
+  quiet = FALSE
 )
 }
 \arguments{
@@ -25,6 +26,8 @@ oscai(
 \item{model}{The model to use. Can be one of "chatgpt", "babbage2", "davinci2".}
 
 \item{scores_col}{The column name to store the scores in. Defaults to ".originality".}
+
+\item{quiet}{Whether to print the citation reminder.}
 }
 \value{
 The input data frame with the scores added.
