@@ -42,6 +42,7 @@ oscai <- function(df, item, answer, model = c("chatgpt", "babbage2", "davinci2")
 
   res <- httr::GET(
     "https://openscoring.du.edu/llm",
+    httr::config(ssl_verifypeer=0),
     query = list(
       model = model,
       input = input
