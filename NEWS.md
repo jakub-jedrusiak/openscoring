@@ -1,3 +1,8 @@
+# openscoring 1.0.2
+
+* Added oscai-1.5 model
+* Debuged CA problems
+
 # openscoring 1.0.1
 
 * Added tests

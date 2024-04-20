@@ -1,6 +1,6 @@
 Package: openscoring
 Title: 'Open Scoring' API Client
-Version: 1.0.1
+Version: 1.0.2
 Authors@R: c(
     person(
         "Jakub", "Jędrusiak",
