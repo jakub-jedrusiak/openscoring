@@ -41,7 +41,7 @@ oscai <- function(df, item, answer, model = c("1.5", "chatgpt", "babbage2", "dav
   answer <- stringr::str_replace_all(answer, ",", " ")
   input <- paste0("\"", item, "\", \"", answer, "\"", collapse = "\n")
 
-  res <- httr::GET(
+  res <- httr::POST(
     "https://openscoring.du.edu/llm",
     httr::config(ssl_verifypeer=0),
     query = list(
