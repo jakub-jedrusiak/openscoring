@@ -11,7 +11,7 @@ oscai(
   df,
   item,
   answer,
-  model = c("chatgpt", "babbage2", "davinci2"),
+  model = c("1.5", "chatgpt", "babbage2", "davinci2"),
   scores_col = ".originality",
   quiet = FALSE
 )
@@ -23,7 +23,7 @@ oscai(
 
 \item{answer}{The column name of the responses. Commas will be replaced with spaces for scoring.}
 
-\item{model}{The model to use. Can be one of "chatgpt", "babbage2", "davinci2".}
+\item{model}{The model to use. Can be one of "1.5", "chatgpt", "babbage2", "davinci2".}
 
 \item{scores_col}{The column name to store the scores in. Defaults to ".originality".}
 

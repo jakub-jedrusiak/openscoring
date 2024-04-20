@@ -6,7 +6,7 @@
 #' @param df A data frame.
 #' @param item The column name of the items or other kind of prompt.
 #' @param answer The column name of the responses. Commas will be replaced with spaces for scoring.
-#' @param model The model to use. Can be one of "chatgpt", "babbage2", "davinci2".
+#' @param model The model to use. Can be one of "1.5", "chatgpt", "babbage2", "davinci2".
 #' @param scores_col The column name to store the scores in. Defaults to ".originality".
 #' @param quiet Whether to print the citation reminder.
 #'
@@ -22,12 +22,13 @@
 #'
 #' @export
 
-oscai <- function(df, item, answer, model = c("chatgpt", "babbage2", "davinci2"), scores_col = ".originality", quiet = FALSE) {
+oscai <- function(df, item, answer, model = c("1.5", "chatgpt", "babbage2", "davinci2"), scores_col = ".originality", quiet = FALSE) {
   item <- rlang::ensym(item)
   answer <- rlang::ensym(answer)
   model <- rlang::arg_match(model)
 
   model <- switch(model,
+    "1.5" = "ocsai-1.5",
     chatgpt = "ocsai-chatgpt",
     babbage2 = "ocsai-babbage2",
     davinci2 = "ocsai-davinci2"
