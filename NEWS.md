@@ -1,3 +1,7 @@
+# openscoring 1.0.3
+
+* Long databases are now split before being sent to the server
+
 # openscoring 1.0.2
 
 * Added oscai-1.5 model

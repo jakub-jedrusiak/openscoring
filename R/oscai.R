@@ -34,32 +34,41 @@ oscai <- function(df, item, answer, model = c("1.5", "chatgpt", "babbage2", "dav
     davinci2 = "ocsai-davinci2"
   )
 
-  item <- df[[rlang::as_label(item)]]
-  answer <- df[[rlang::as_label(answer)]]
+  df <- split(df, ceiling(seq_along(df[[rlang::as_label(item)]]) / 50)) # break into 50-row chunks
 
-  item <- stringr::str_replace_all(item, ",", " ")
-  answer <- stringr::str_replace_all(answer, ",", " ")
-  input <- paste0("\"", item, "\", \"", answer, "\"", collapse = "\n")
+  purrr::map(
+    df,
+    \(df) {
+      item <- df[[rlang::as_label(item)]]
+      answer <- df[[rlang::as_label(answer)]]
 
-  res <- httr::POST(
-    "https://openscoring.du.edu/llm",
-    httr::config(ssl_verifypeer=0),
-    query = list(
-      model = model,
-      input = input
-    )
-  )
+      item <- stringr::str_replace_all(item, ",", " ")
+      answer <- stringr::str_replace_all(answer, ",", " ")
+      input <- paste0("\"", item, "\", \"", answer, "\"", collapse = "\n")
 
-  if (res$status_code != 200) {
-    cli::cli_abort("OpenScoring API returned status code {res$status_code}\n\n{res}")
-  }
+      res <- httr::POST(
+        "https://openscoring.du.edu/llm",
+        httr::config(ssl_verifypeer = 0),
+        query = list(
+          model = model,
+          input = input
+        )
+      )
 
-  content <- jsonlite::fromJSON(stringr::str_replace_all(rawToChar(res$content), "NaN", "\"NA\""))
+      if (res$status_code != 200) {
+        cli::cli_abort("OpenScoring API returned status code {res$status_code}\n\n{res}")
+      }
 
-  if (!quiet) {
-    cli::cli_inform(c("v" = "Remember to cite:\n\n{content$cite}"))
-  }
-  df[[scores_col]] <- content$scores$originality
+      content <- jsonlite::fromJSON(stringr::str_replace_all(rawToChar(res$content), "NaN", "\"NA\""))
 
-  return(df)
+      if (!quiet) {
+        cli::cli_inform(c("v" = "Remember to cite:\n\n{content$cite}"))
+      }
+      df[[scores_col]] <- content$scores$originality
+
+      return(df)
+    },
+    .progress = !quiet
+  ) |>
+    dplyr::bind_rows()
 }
