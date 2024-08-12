@@ -50,7 +50,7 @@ df <- tibble::tibble(
 
 df
 
-scored_df <- oscai(df, stimulus, response, model = "davinci3")
+scored_df <- oscai(df, stimulus, response, model = "chatgpt2")
 
 scored_df
 ```
@@ -58,7 +58,7 @@ scored_df
 The `"1.5"` model works for multiple languages:
 
 ```{r example2}
-df_polish <- data.frame(
+df_polish <- tibble::tibble(
  stimulus = c("cegła", "młotek", "gąbka"),
   response = c("masło dla trolli", "wywoływanie zazdrości u Thora", "postać w programie dla dzieci")
 )
