@@ -1,6 +1,8 @@
 # openscoring 1.0.3
 
 * Long databases are now split before being sent to the server
+* Added the `language` argument to `oscai()`
+* Updated the available models
 
 # openscoring 1.0.2
 

@@ -52,22 +52,28 @@ df
 #> 2 hammer   make Thor jealous          
 #> 3 sponge   make it play in a kids show
 
-scored_df <- oscai(df, stimulus, response, model = "davinci2")
-#> ✔ Remember to cite:
-#> 
-#> Organisciak, P., Dumas, D., Acar, S., and de Chantal, P. L. (2024). Open
-#>   Creativity Scoring \[Computer software\]. Denver, CO: University of Denver.
-#>   https://openscoring.du.edu. and Organisciak, P., Acar, S., Dumas, D., &
-#>   Berthiaume, K. (2023). Beyond semantic distance: Automated scoring of
-#>   divergent thinking greatly improves with large language models. *Thinking
-#>   Skills and Creativity*, 49, 101356.
-#>   <https://doi.org/10.1016/j.tsc.2023.101356>
+scored_df <- oscai(df, stimulus, response, model = "davinci3")
 
 scored_df
 #> # A tibble: 3 × 3
 #>   stimulus response                    .originality
 #>   <chr>    <chr>                              <dbl>
-#> 1 brick    butter for trolls                    3  
-#> 2 hammer   make Thor jealous                    2.7
-#> 3 sponge   make it play in a kids show          2.7
+#> 1 brick    butter for trolls                    NA 
+#> 2 hammer   make Thor jealous                     3 
+#> 3 sponge   make it play in a kids show         333.
+```
+
+The `"1.5"` model works for multiple languages:
+
+``` r
+df_polish <- data.frame(
+ stimulus = c("cegła", "młotek", "gąbka"),
+  response = c("masło dla trolli", "wywoływanie zazdrości u Thora", "postać w programie dla dzieci")
+)
+
+oscai(df_polish, stimulus, response, model = "1.5", language = "Polish")
+#>   stimulus                      response .originality
+#> 1    cegła              masło dla trolli          2.3
+#> 2   młotek wywoływanie zazdrości u Thora          3.7
+#> 3    gąbka postać w programie dla dzieci          2.3
 ```
