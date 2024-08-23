@@ -21,7 +21,7 @@
 #'
 #' df <- oscai(df, stimulus, response, model = "davinci3")
 #'
-#' # The 1.5 model works for multiple languages
+#' # The 1.5 model and upwards works for multiple languages
 #' df_polish <- data.frame(
 #'   stimulus = c("cegła", "młotek", "gąbka"),
 #'   response = c("masło dla trolli", "wywoływanie zazdrości u Thora", "postać w programie dla dzieci")
