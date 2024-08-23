@@ -1,3 +1,9 @@
+# openscoring 1.0.4
+
+* Added the `oscai-1.6` model
+* Added the `oscai1-4o` model
+* The function now fails gracefully when the server is not available
+
 # openscoring 1.0.3
 
 * Long databases are now split before being sent to the server
