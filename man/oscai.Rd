@@ -11,7 +11,8 @@ oscai(
   df,
   item,
   answer,
-  model = c("1.5", "davinci3", "chatgpt2", "chatgpt", "babbage2", "davinci2"),
+  model = c("1.6", "1-4o", "davinci3", "chatgpt2", "1.5", "chatgpt", "babbage2",
+    "davinci2"),
   language = "English",
   scores_col = ".originality",
   quiet = FALSE
@@ -24,9 +25,9 @@ oscai(
 
 \item{answer}{The column name of the responses. Commas will be replaced with spaces for scoring.}
 
-\item{model}{The model to use. Should be one of "1.5", "davinci3", "chatgpt2". Deprecated models are kept for compatibility.}
+\item{model}{The model to use. Should be one of "1.6", "1-4o", "davinci3", "chatgpt2". Deprecated models are kept for compatibility.}
 
-\item{language}{The language of the input. Only works for the 1.5 model. Should be one of "Arabic", "Chinese", "Dutch", "English", "French", "German", "Hebrew", "Italian", "Polish", "Russian", "Spanish".}
+\item{language}{The language of the input. Only works for the 1.5 model upwards. Should be one of "Arabic", "Chinese", "Dutch", "English", "French", "German", "Hebrew", "Italian", "Polish", "Russian", "Spanish".}
 
 \item{scores_col}{The column name to store the scores in. Defaults to ".originality".}
 
@@ -44,9 +45,11 @@ for more information. Requires an internet connection.
 \details{
 Available models:
 \itemize{
-\item ocsai-1.5: Beta version of new multi-lingual, multi-task model, trained on GPT 3.5.
-\item ocsai-davinci3: GPT-3 Davinci-size model. Trained with the method from Organisciak et al. 2023, but with the additional tasks (uses, consequences, instances, complete the sentence) from Acar et al 2023, and trained with more data.
+\item ocsai-1.6: Update to the multi-lingual, multi-task 1.5 model, trained on GPT 4o instead of 3.5.
+\item ocsai1-4o: GPT-4o-based model, trained with more data and supporting multiple tasks. Last update to the Ocsai 1 models (i.e. the original ones).
 \item ocsai-chatgpt2: GPT-3.5-size chat-based model, trained with more data and supporting multiple tasks. Scoring is slower, with slightly better performance than ocsai-davinci.
+\item ocsai-davinci3: GPT-3 Davinci-size model. Trained with the method from Organisciak et al. 2023, but with the additional tasks (uses, consequences, instances, complete the sentence) from Acar et al 2023, and trained with more data.
+\item ocsai-1.5: Beta version of new multi-lingual, multi-task model, trained on GPT 3.5.
 \item ocsai-chatgpt: GPT-3.5-size chat-based model, trained with same format and data as original models. Scoring is slower, with slightly better performance than ocsai-davinci2. For more tasks and trained on more data, use davinci-ocsai2
 \item ocsai-babbage2: GPT-3 Babbage-size model from the paper, retrained with new model API. Deprecated, mainly because other models work better.
 \item ocsai-davinci2: GPT-3 Davinci-size model from the paper, retrained with a new model API.
