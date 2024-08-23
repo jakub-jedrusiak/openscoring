@@ -82,13 +82,12 @@ oscai <- function(df, item, answer, model = c("1.6", "1-4o", "davinci3", "chatgp
       )
 
       if (res$status_code != 200) {
-        cli::cli_abort("OpenScoring API returned status code {res$status_code}\n\n{res}")
+        cli::cli_inform(c("!" = "The database possibly contains false {.code NA} values due to a server error", "i" = "Check your internet connection and consider rerunning the {.fn oscai} fucntion call", " " = "OpenScoring API returned status code {res$status_code}", " " = "{res}"))
+        df[[scores_col]] <- NA
+      } else {
+        content <- jsonlite::fromJSON(stringr::str_replace_all(rawToChar(res$content), "NaN", "\"NA\""))
+        df[[scores_col]] <- content$scores$originality
       }
-
-      content <- jsonlite::fromJSON(stringr::str_replace_all(rawToChar(res$content), "NaN", "\"NA\""))
-
-      df[[scores_col]] <- content$scores$originality
-
       return(df)
     },
     .progress = !quiet
