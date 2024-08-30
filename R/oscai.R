@@ -82,15 +82,14 @@ oscai <- function(df, item, answer, model = c("1.6", "1-4o", "davinci3", "chatgp
         )
       )
       
-      content <- jsonlite::fromJSON(stringr::str_replace_all(rawToChar(res$content), "NaN", "\"NA\""))
-      
-      if (res$status_code == 400 & any(stringr::str_detect(content, "Request Line is too large"))) {
-        temp <- oscai(df, item, answer, model = model, language = language, scores_col = "scores", quiet = TRUE, chunk_size = 10)
+      if (res$status_code == 400 & any(stringr::str_detect(rawToChar(res$content), "Request Line is too large"))) {
+        temp <- oscai(df, item, answer, model = stringr::str_remove(model, "ocsai-?"), language = language, scores_col = "scores", quiet = TRUE, chunk_size = 10)
         df[[scores_col]] <- temp$scores
       } else if (res$status_code != 200) {
         cli::cli_inform(c("!" = "The database possibly contains false {.code NA} values due to a server error", "i" = "Check your internet connection and consider rerunning the {.fn oscai} fucntion call", " " = "OpenScoring API returned status code {res$status_code}", " " = "{res}"))
         df[[scores_col]] <- NA
       } else {
+        content <- jsonlite::fromJSON(stringr::str_replace_all(rawToChar(res$content), "NaN", "\"NA\""))
         df[[scores_col]] <- content$scores$originality
       }
       return(df)
