@@ -15,7 +15,8 @@ oscai(
     "davinci2"),
   language = "English",
   scores_col = ".originality",
-  quiet = FALSE
+  quiet = FALSE,
+  chunk_size = 50
 )
 }
 \arguments{
@@ -32,6 +33,8 @@ oscai(
 \item{scores_col}{The column name to store the scores in. Defaults to ".originality".}
 
 \item{quiet}{Whether to print the citation reminder.}
+
+\item{chunk_size}{The number of rows to send to the API at once. Defaults to 50. If a request is too large, it will be split into 10-row chunks.}
 }
 \value{
 The input data frame with the scores added.

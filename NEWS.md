@@ -1,3 +1,8 @@
+# openscoring 1.0.5
+
+* If the request line is too large, the function now splits the request in multiple parts
+* Added the `chunk_size` argument to `oscai()`
+
 # openscoring 1.0.4
 
 * Added the `oscai-1.6` model

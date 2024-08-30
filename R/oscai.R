@@ -10,6 +10,7 @@
 #' @param language The language of the input. Only works for the 1.5 model upwards. Should be one of "Arabic", "Chinese", "Dutch", "English", "French", "German", "Hebrew", "Italian", "Polish", "Russian", "Spanish".
 #' @param scores_col The column name to store the scores in. Defaults to ".originality".
 #' @param quiet Whether to print the citation reminder.
+#' @param chunk_size The number of rows to send to the API at once. Defaults to 50. If a request is too large, it will be split into 10-row chunks.
 #'
 #' @return The input data frame with the scores added.
 #'
@@ -42,7 +43,7 @@
 #'
 #' @export
 
-oscai <- function(df, item, answer, model = c("1.6", "1-4o", "davinci3", "chatgpt2", "1.5", "chatgpt", "babbage2", "davinci2"), language = "English", scores_col = ".originality", quiet = FALSE) {
+oscai <- function(df, item, answer, model = c("1.6", "1-4o", "davinci3", "chatgpt2", "1.5", "chatgpt", "babbage2", "davinci2"), language = "English", scores_col = ".originality", quiet = FALSE, chunk_size = 50) {
   item <- rlang::ensym(item)
   answer <- rlang::ensym(answer)
   model <- rlang::arg_match(model)
@@ -59,7 +60,7 @@ oscai <- function(df, item, answer, model = c("1.6", "1-4o", "davinci3", "chatgp
     davinci2 = "ocsai-davinci2"
   )
 
-  df <- split(df, ceiling(seq_along(df[[rlang::as_label(item)]]) / 50)) # break into 50-row chunks
+  df <- split(df, ceiling(seq_along(df[[rlang::as_label(item)]]) / chunk_size)) # break into 50-row chunks
 
   purrr::map(
     df,
@@ -80,12 +81,16 @@ oscai <- function(df, item, answer, model = c("1.6", "1-4o", "davinci3", "chatgp
           language = language
         )
       )
-
-      if (res$status_code != 200) {
+      
+      content <- jsonlite::fromJSON(stringr::str_replace_all(rawToChar(res$content), "NaN", "\"NA\""))
+      
+      if (res$status_code == 400 & any(stringr::str_detect(content, "Request Line is too large"))) {
+        temp <- oscai(df, item, answer, model = model, language = language, scores_col = "scores", quiet = TRUE, chunk_size = 10)
+        df[[scores_col]] <- temp$scores
+      } else if (res$status_code != 200) {
         cli::cli_inform(c("!" = "The database possibly contains false {.code NA} values due to a server error", "i" = "Check your internet connection and consider rerunning the {.fn oscai} fucntion call", " " = "OpenScoring API returned status code {res$status_code}", " " = "{res}"))
         df[[scores_col]] <- NA
       } else {
-        content <- jsonlite::fromJSON(stringr::str_replace_all(rawToChar(res$content), "NaN", "\"NA\""))
         df[[scores_col]] <- content$scores$originality
       }
       return(df)
