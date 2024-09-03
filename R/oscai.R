@@ -88,9 +88,9 @@ oscai <- function(df, item, answer, model = c("1.6", "1-4o", "davinci3", "chatgp
       item <- df[[rlang::as_label(item_col)]]
       answer <- df[[rlang::as_label(answer_col)]]
 
-      item <- stringr::str_replace_all(item, ",", " ")
-      answer <- stringr::str_replace_all(answer, ",", " ")
-      input <- paste0("\"", item, "\", \"", answer, "\"", collapse = "\n")
+      item <- stringr::str_replace_all(item, ",", " ") |> stringr::str_squish()
+      answer <- stringr::str_replace_all(answer, ",", " ") |> stringr::str_squish()
+      input <- paste0("\"", item, "\",\"", answer, "\"", collapse = "\n")
 
       res <- httr::POST(
         "https://openscoring.du.edu/llm",
