@@ -44,10 +44,30 @@
 #' @export
 
 oscai <- function(df, item, answer, model = c("1.6", "1-4o", "davinci3", "chatgpt2", "1.5", "chatgpt", "babbage2", "davinci2"), language = "English", scores_col = ".originality", quiet = FALSE, chunk_size = 50) {
-  item <- rlang::ensym(item)
-  answer <- rlang::ensym(answer)
+  item_col <- rlang::ensym(item)
+  answer_col <- rlang::ensym(answer)
   model <- rlang::arg_match(model)
   language <- rlang::arg_match0(language, values = c("Arabic", "Chinese", "Dutch", "English", "French", "German", "Hebrew", "Italian", "Polish", "Russian", "Spanish"))
+
+  if (!rlang::has_name(df, rlang::as_name(item_col))) {
+    cli::cli_abort(
+      c(
+        "All columns must exist in the data.",
+        "x" = "Column {.var {rlang::as_name(item_col)}} does not exist.",
+        "i" = "Check the spelling."
+      )
+    )
+  }
+
+  if (!rlang::has_name(df, rlang::as_name(answer_col))) {
+    cli::cli_abort(
+      c(
+        "All columns must exist in the data.",
+        "x" = "Column {.var {rlang::as_name(answer_col)}} does not exist.",
+        "i" = "Check the spelling."
+      )
+    )
+  }
 
   model <- switch(model,
     "1.6" = "ocsai-1.6",
@@ -60,13 +80,13 @@ oscai <- function(df, item, answer, model = c("1.6", "1-4o", "davinci3", "chatgp
     davinci2 = "ocsai-davinci2"
   )
 
-  df <- split(df, ceiling(seq_along(df[[rlang::as_label(item)]]) / chunk_size)) # break into 50-row chunks
+  df <- split(df, ceiling(seq_along(df[[rlang::as_label(item_col)]]) / chunk_size)) # break into 50-row chunks
 
   purrr::map(
     df,
     \(df) {
-      item <- df[[rlang::as_label(item)]]
-      answer <- df[[rlang::as_label(answer)]]
+      item <- df[[rlang::as_label(item_col)]]
+      answer <- df[[rlang::as_label(answer_col)]]
 
       item <- stringr::str_replace_all(item, ",", " ")
       answer <- stringr::str_replace_all(answer, ",", " ")
@@ -81,9 +101,9 @@ oscai <- function(df, item, answer, model = c("1.6", "1-4o", "davinci3", "chatgp
           language = language
         )
       )
-      
+
       if (res$status_code == 400 & any(stringr::str_detect(rawToChar(res$content), "Request Line is too large"))) {
-        temp <- oscai(df, item, answer, model = stringr::str_remove(model, "ocsai-?"), language = language, scores_col = "scores", quiet = TRUE, chunk_size = 10)
+        temp <- oscai(df, !!item_col, !!answer_col, model = stringr::str_remove(model, "ocsai-?"), language = language, scores_col = "scores", quiet = TRUE, chunk_size = 10)
         df[[scores_col]] <- temp$scores
       } else if (res$status_code != 200) {
         cli::cli_inform(c("!" = "The database possibly contains false {.code NA} values due to a server error", "i" = "Check your internet connection and consider rerunning the {.fn oscai} fucntion call", " " = "OpenScoring API returned status code {res$status_code}", " " = "{res}"))
