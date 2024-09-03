@@ -2,6 +2,8 @@
 
 * If the request line is too large, the function now splits the request in multiple parts
 * Added the `chunk_size` argument to `oscai()`
+* `oscai()` now checks if columns exist
+* Input sanitation is now better
 
 # openscoring 1.0.4
 
