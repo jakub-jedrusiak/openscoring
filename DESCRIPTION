@@ -4,7 +4,7 @@ Version: 1.0.5
 Authors@R: c(
     person(
         "Jakub", "Jędrusiak",
-        email = "kuba23031999@gmail.com",
+        email = "jakub.jedrusiak2@uwr.edu.pl",
         role = c("aut", "cre", "cph"),
         comment = c(
             ORCID = "0000-0002-6481-8210",
