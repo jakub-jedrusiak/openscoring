@@ -20,7 +20,7 @@
 #'   response = c("butter for trolls", "make Thor jealous", "make it play in a kids show")
 #' )
 #'
-#' df <- oscai(df, stimulus, response, model = "davinci3")
+#' df <- ocsai(df, stimulus, response, model = "davinci3")
 #'
 #' # The 1.5 model and upwards works for multiple languages
 #' df_polish <- data.frame(
@@ -28,7 +28,7 @@
 #'   response = c("masło dla trolli", "wywoływanie zazdrości u Thora", "postać w programie dla dzieci")
 #' )
 #'
-#' df_polish <- oscai(df_polish, stimulus, response, model = "1.5", language = "Polish")
+#' df_polish <- ocsai(df_polish, stimulus, response, model = "1.5", language = "Polish")
 #'
 #' @details
 #' Available models:
@@ -43,7 +43,7 @@
 #'
 #' @export
 
-oscai <- function(df, item, answer, model = c("1.6", "1-4o", "davinci3", "chatgpt2", "1.5", "chatgpt", "babbage2", "davinci2"), language = "English", scores_col = ".originality", quiet = FALSE, chunk_size = 50) {
+ocsai <- function(df, item, answer, model = c("1.6", "1-4o", "davinci3", "chatgpt2", "1.5", "chatgpt", "babbage2", "davinci2"), language = "English", scores_col = ".originality", quiet = FALSE, chunk_size = 50) {
   item_col <- rlang::ensym(item)
   answer_col <- rlang::ensym(answer)
   model <- rlang::arg_match(model)
@@ -103,10 +103,10 @@ oscai <- function(df, item, answer, model = c("1.6", "1-4o", "davinci3", "chatgp
       )
 
       if (res$status_code == 400 & any(stringr::str_detect(rawToChar(res$content), "Request Line is too large"))) {
-        temp <- oscai(df, !!item_col, !!answer_col, model = stringr::str_remove(model, "ocsai-?"), language = language, scores_col = "scores", quiet = TRUE, chunk_size = 10)
+        temp <- ocsai(df, !!item_col, !!answer_col, model = stringr::str_remove(model, "ocsai-?"), language = language, scores_col = "scores", quiet = TRUE, chunk_size = 10)
         df[[scores_col]] <- temp$scores
       } else if (res$status_code != 200) {
-        cli::cli_inform(c("!" = "The database possibly contains false {.code NA} values due to a server error", "i" = "Check your internet connection and consider rerunning the {.fn oscai} fucntion call", " " = "OpenScoring API returned status code {res$status_code}", " " = "{res}"))
+        cli::cli_inform(c("!" = "The database possibly contains false {.code NA} values due to a server error", "i" = "Check your internet connection and consider rerunning the {.fn ocsai} fucntion call", " " = "OpenScoring API returned status code {res$status_code}", " " = "{res}"))
         df[[scores_col]] <- NA
       } else {
         content <- jsonlite::fromJSON(stringr::str_replace_all(rawToChar(res$content), "NaN", "\"NA\""))
