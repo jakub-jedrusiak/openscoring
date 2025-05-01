@@ -59,7 +59,7 @@ The `"1.5"` model works for multiple languages:
 
 ```{r example2}
 df_polish <- tibble::tibble(
- stimulus = c("cegła", "młotek", "gąbka"),
+  stimulus = c("cegła", "młotek", "gąbka"),
   response = c("masło dla trolli", "wywoływanie zazdrości u Thora", "postać w programie dla dzieci")
 )
 

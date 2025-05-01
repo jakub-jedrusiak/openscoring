@@ -13,6 +13,7 @@
 #' @param chunk_size The number of rows to send to the API at once. Defaults to 50. If a request is too large, it will be split into 10-row chunks.
 #' @param task The name of the task to be scored. Can be "uses" (default), "completion", "consequences", "instances" or "metaphors".
 #' @param short_prompt Whether the prompt is a short prompt (`TRUE`) or a full question (`FALSE`). Defaults to `TRUE`.
+#' @param question You can set this arg instead of providing the `item` column.
 #'
 #' @return The input data frame with the scores added.
 #'
@@ -45,16 +46,18 @@
 #'
 #' @export
 
-ocsai <- function(df, item, answer, model = c("1.6", "1-4o", "davinci3", "chatgpt2", "1.5", "chatgpt", "babbage2", "davinci2"), language = "English", scores_col = ".originality", quiet = FALSE, chunk_size = 50, task = "uses", short_prompt = TRUE) {
-  item_col <- rlang::ensym(item)
+ocsai <- function(df, item, answer, model = c("1.6", "1-4o", "davinci3", "chatgpt2", "1.5", "chatgpt", "babbage2", "davinci2"), language = "English", scores_col = ".originality", quiet = FALSE, chunk_size = 50, task = "uses", short_prompt = TRUE, question = NULL) {
+  if (is.null(question)) {
+    item_col <- rlang::ensym(item)
+  }
   answer_col <- rlang::ensym(answer)
   model <- rlang::arg_match(model)
   language <- rlang::arg_match0(language, values = c("Arabic", "Chinese", "Dutch", "English", "French", "German", "Hebrew", "Italian", "Polish", "Russian", "Spanish"))
   task <- rlang::arg_match0(task, values = c("uses", "completion", "consequences", "instances", "metaphors"))
   short_prompt <- as.logical(short_prompt)
-  
-  
-  if (!rlang::has_name(df, rlang::as_name(item_col))) {
+
+
+  if (is.null(question) && !rlang::has_name(df, rlang::as_name(item_col))) {
     cli::cli_abort(
       c(
         "All columns must exist in the data.",
@@ -85,22 +88,24 @@ ocsai <- function(df, item, answer, model = c("1.6", "1-4o", "davinci3", "chatgp
     davinci2 = "ocsai-davinci2"
   )
 
-  df <- split(df, ceiling(seq_along(df[[rlang::as_label(item_col)]]) / chunk_size)) # break into 50-row chunks
+  df <- split(df, ceiling(seq_along(df[[rlang::as_label(answer_col)]]) / chunk_size)) # break into 50-row chunks
 
   purrr::map(
     df,
     \(df) {
-      item <- df[[rlang::as_label(item_col)]]
       answer <- df[[rlang::as_label(answer_col)]]
+      answer <- answer |>
+        stringr::str_squish() |>
+        curl::curl_escape()
+      if (is.null(question)) {
+        item <- df[[rlang::as_label(item_col)]]
 
-      item <- item |> stringr::str_squish() |> curl::curl_escape()
-      answer <- answer |> stringr::str_squish() |> curl::curl_escape()
-      input <- paste0("\"", item, "\",\"", answer, "\"", collapse = "\n")
+        item <- item |>
+          stringr::str_squish() |>
+          curl::curl_escape()
 
-      res <- httr::POST(
-        "https://openscoring.du.edu/llm",
-        httr::config(ssl_verifypeer = 0),
-        query = list(
+        input <- paste0("\"", item, "\",\"", answer, "\"", collapse = "\n")
+        query <- list(
           model = model,
           input = input,
           language = language,
@@ -108,6 +113,27 @@ ocsai <- function(df, item, answer, model = c("1.6", "1-4o", "davinci3", "chatgp
           prompt_in_input = short_prompt,
           question_in_input = !short_prompt
         )
+      } else {
+        input <- paste0('"', answer, '"', collapse = "\n")
+        query <- list(
+          model = model,
+          input = input,
+          language = language,
+          task = task,
+          prompt_in_input = FALSE,
+          question_in_input = FALSE
+        )
+        if (short_prompt) {
+          query$prompt <- question
+        } else {
+          query$question <- question
+        }
+      }
+
+      res <- httr::POST(
+        "https://openscoring.du.edu/llm",
+        httr::config(ssl_verifypeer = 0),
+        query = query
       )
 
       if (res$status_code == 400 & any(stringr::str_detect(rawToChar(res$content), "Request Line is too large"))) {

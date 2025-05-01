@@ -18,7 +18,8 @@ ocsai(
   quiet = FALSE,
   chunk_size = 50,
   task = "uses",
-  short_prompt = TRUE
+  short_prompt = TRUE,
+  question = NULL
 )
 }
 \arguments{
@@ -41,6 +42,8 @@ ocsai(
 \item{task}{The name of the task to be scored. Can be "uses" (default), "completion", "consequences", "instances" or "metaphors".}
 
 \item{short_prompt}{Whether the prompt is a short prompt (\code{TRUE}) or a full question (\code{FALSE}). Defaults to \code{TRUE}.}
+
+\item{question}{You can set this arg instead of providing the \code{item} column.}
 }
 \value{
 The input data frame with the scores added.

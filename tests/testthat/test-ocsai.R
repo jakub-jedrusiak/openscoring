@@ -24,3 +24,7 @@ test_that("autosplitting works", {
   autosplit_df[["item"]] <- "Cegła"
   expect_no_error(ocsai(autosplit_df, item, response, model = "1.6", language = "Polish", quiet = TRUE))
 })
+
+test_that("question arg works", {
+  expect_no_error(ocsai(df, NULL, response, question = "brick"))
+})
