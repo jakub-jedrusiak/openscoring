@@ -16,7 +16,9 @@ ocsai(
   language = "English",
   scores_col = ".originality",
   quiet = FALSE,
-  chunk_size = 50
+  chunk_size = 50,
+  task = "uses",
+  short_prompt = TRUE
 )
 }
 \arguments{
@@ -35,6 +37,10 @@ ocsai(
 \item{quiet}{Whether to print the citation reminder.}
 
 \item{chunk_size}{The number of rows to send to the API at once. Defaults to 50. If a request is too large, it will be split into 10-row chunks.}
+
+\item{task}{The name of the task to be scored. Can be "uses" (default), "completion", "consequences", "instances" or "metaphors".}
+
+\item{short_prompt}{Whether the prompt is a short prompt (\code{TRUE}) or a full question (\code{FALSE}). Defaults to \code{TRUE}.}
 }
 \value{
 The input data frame with the scores added.

@@ -11,6 +11,8 @@
 #' @param scores_col The column name to store the scores in. Defaults to ".originality".
 #' @param quiet Whether to print the citation reminder.
 #' @param chunk_size The number of rows to send to the API at once. Defaults to 50. If a request is too large, it will be split into 10-row chunks.
+#' @param task The name of the task to be scored. Can be "uses" (default), "completion", "consequences", "instances" or "metaphors".
+#' @param short_prompt Whether the prompt is a short prompt (`TRUE`) or a full question (`FALSE`). Defaults to `TRUE`.
 #'
 #' @return The input data frame with the scores added.
 #'
@@ -43,12 +45,15 @@
 #'
 #' @export
 
-ocsai <- function(df, item, answer, model = c("1.6", "1-4o", "davinci3", "chatgpt2", "1.5", "chatgpt", "babbage2", "davinci2"), language = "English", scores_col = ".originality", quiet = FALSE, chunk_size = 50) {
+ocsai <- function(df, item, answer, model = c("1.6", "1-4o", "davinci3", "chatgpt2", "1.5", "chatgpt", "babbage2", "davinci2"), language = "English", scores_col = ".originality", quiet = FALSE, chunk_size = 50, task = "uses", short_prompt = TRUE) {
   item_col <- rlang::ensym(item)
   answer_col <- rlang::ensym(answer)
   model <- rlang::arg_match(model)
   language <- rlang::arg_match0(language, values = c("Arabic", "Chinese", "Dutch", "English", "French", "German", "Hebrew", "Italian", "Polish", "Russian", "Spanish"))
-
+  task <- rlang::arg_match0(task, values = c("uses", "completion", "consequences", "instances", "metaphors"))
+  short_prompt <- as.logical(short_prompt)
+  
+  
   if (!rlang::has_name(df, rlang::as_name(item_col))) {
     cli::cli_abort(
       c(
@@ -88,8 +93,8 @@ ocsai <- function(df, item, answer, model = c("1.6", "1-4o", "davinci3", "chatgp
       item <- df[[rlang::as_label(item_col)]]
       answer <- df[[rlang::as_label(answer_col)]]
 
-      item <- stringr::str_replace_all(item, ",", " ") |> stringr::str_squish()
-      answer <- stringr::str_replace_all(answer, ",", " ") |> stringr::str_squish()
+      item <- item |> stringr::str_squish() |> curl::curl_escape()
+      answer <- answer |> stringr::str_squish() |> curl::curl_escape()
       input <- paste0("\"", item, "\",\"", answer, "\"", collapse = "\n")
 
       res <- httr::POST(
@@ -98,7 +103,10 @@ ocsai <- function(df, item, answer, model = c("1.6", "1-4o", "davinci3", "chatgp
         query = list(
           model = model,
           input = input,
-          language = language
+          language = language,
+          task = task,
+          prompt_in_input = short_prompt,
+          question_in_input = !short_prompt
         )
       )
 

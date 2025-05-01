@@ -17,7 +17,7 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Jakub Jędrusiak \email{kuba23031999@gmail.com} (\href{https://orcid.org/0000-0002-6481-8210}{ORCID}) (University of Wroclaw) [copyright holder]
+\strong{Maintainer}: Jakub Jędrusiak \email{jakub.jedrusiak2@uwr.edu.pl} (\href{https://orcid.org/0000-0002-6481-8210}{ORCID}) (University of Wroclaw) [copyright holder]
 
 Other contributors:
 \itemize{
