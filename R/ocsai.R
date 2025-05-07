@@ -1,7 +1,9 @@
 #' @title Score with an AI
-#' A basic function to score the creativity with an AI.
-#' See [the OpenScoring site](https://openscoring.du.edu/scoringllm)
-#' for more information. Requires an internet connection.
+#' 
+#' @description
+#'  A basic function to score the creativity with an AI.
+#'  See [the OpenScoring site](https://openscoring.du.edu/scoringllm)
+#'  for more information. Requires an internet connection.
 #'
 #' @param df A data frame.
 #' @param item The column name of the items or other kind of prompt.
@@ -53,7 +55,7 @@ ocsai <- function(df, item, answer, model = c("1.6", "1-4o", "davinci3", "chatgp
   answer_col <- rlang::ensym(answer)
   model <- rlang::arg_match(model)
   language <- rlang::arg_match0(language, values = c("Arabic", "Chinese", "Dutch", "English", "French", "German", "Hebrew", "Italian", "Polish", "Russian", "Spanish"))
-  task <- rlang::arg_match0(task, values = c("uses", "completion", "consequences", "instances", "metaphors"))
+  # task <- rlang::arg_match0(task, values = c("uses", "completion", "consequences", "instances", "metaphors"))
   short_prompt <- as.logical(short_prompt)
 
 
@@ -136,11 +138,21 @@ ocsai <- function(df, item, answer, model = c("1.6", "1-4o", "davinci3", "chatgp
         query = query
       )
 
-      if (res$status_code == 400 & any(stringr::str_detect(rawToChar(res$content), "Request Line is too large"))) {
+      if ((res$status_code == 400 & any(stringr::str_detect(rawToChar(res$content), "Request Line is too large"))) | res$status_code == 414) {
+        if (chunk_size == 1) {
+          print(df)
+          cli::cli_abort(
+            c(
+              "x" = "The input of one particular line is too long for the server to process.",
+              "i" = "Try using a smaller chunk size."
+            )
+          )
+        }
+        temp_size <- ifelse(chunk_size > 10, 10, 1)
         if (is.null(question)) {
-          temp <- ocsai(df, !!item_col, !!answer_col, model = stringr::str_remove(model, "ocsai-?"), language = language, scores_col = "scores", quiet = TRUE, chunk_size = 10, task = task, short_prompt = short_prompt)
+          temp <- ocsai(df, !!item_col, !!answer_col, model = stringr::str_remove(model, "ocsai-?"), language = language, scores_col = "scores", quiet = TRUE, chunk_size = temp_size, task = task, short_prompt = short_prompt)
         } else {
-          temp <- ocsai(df, NULL, !!answer_col, model = stringr::str_remove(model, "ocsai-?"), language = language, scores_col = "scores", quiet = TRUE, chunk_size = 10, question = question, task = task, short_prompt = short_prompt)
+          temp <- ocsai(df, NULL, !!answer_col, model = stringr::str_remove(model, "ocsai-?"), language = language, scores_col = "scores", quiet = TRUE, chunk_size = temp_size, question = question, task = task, short_prompt = short_prompt)
         }
         df[[scores_col]] <- temp$scores
       } else if (res$status_code != 200) {

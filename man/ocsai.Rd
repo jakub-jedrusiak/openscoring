@@ -2,10 +2,7 @@
 % Please edit documentation in R/ocsai.R
 \name{ocsai}
 \alias{ocsai}
-\title{Score with an AI
-A basic function to score the creativity with an AI.
-See \href{https://openscoring.du.edu/scoringllm}{the OpenScoring site}
-for more information. Requires an internet connection.}
+\title{Score with an AI}
 \usage{
 ocsai(
   df,
@@ -49,7 +46,6 @@ ocsai(
 The input data frame with the scores added.
 }
 \description{
-Score with an AI
 A basic function to score the creativity with an AI.
 See \href{https://openscoring.du.edu/scoringllm}{the OpenScoring site}
 for more information. Requires an internet connection.
