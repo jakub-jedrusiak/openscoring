@@ -1,5 +1,5 @@
 #' @title Score with an AI
-#' 
+#'
 #' @description
 #'  A basic function to score the creativity with an AI.
 #'  See [the OpenScoring site](https://openscoring.du.edu/scoringllm)
@@ -48,16 +48,51 @@
 #'
 #' @export
 
-ocsai <- function(df, item, answer, model = c("1.6", "1-4o", "davinci3", "chatgpt2", "1.5", "chatgpt", "babbage2", "davinci2"), language = "English", scores_col = ".originality", quiet = FALSE, chunk_size = 50, task = "uses", short_prompt = TRUE, question = NULL) {
+ocsai <- function(
+  df,
+  item,
+  answer,
+  model = c(
+    "1.6",
+    "1-4o",
+    "davinci3",
+    "chatgpt2",
+    "1.5",
+    "chatgpt",
+    "babbage2",
+    "davinci2"
+  ),
+  language = "English",
+  scores_col = ".originality",
+  quiet = FALSE,
+  chunk_size = 50,
+  task = "uses",
+  short_prompt = TRUE,
+  question = NULL
+) {
   if (is.null(question)) {
     item_col <- rlang::ensym(item)
   }
   answer_col <- rlang::ensym(answer)
   model <- rlang::arg_match(model)
-  language <- rlang::arg_match0(language, values = c("Arabic", "Chinese", "Dutch", "English", "French", "German", "Hebrew", "Italian", "Polish", "Russian", "Spanish"))
+  language <- rlang::arg_match0(
+    language,
+    values = c(
+      "Arabic",
+      "Chinese",
+      "Dutch",
+      "English",
+      "French",
+      "German",
+      "Hebrew",
+      "Italian",
+      "Polish",
+      "Russian",
+      "Spanish"
+    )
+  )
   # task <- rlang::arg_match0(task, values = c("uses", "completion", "consequences", "instances", "metaphors"))
   short_prompt <- as.logical(short_prompt)
-
 
   if (is.null(question) && !rlang::has_name(df, rlang::as_name(item_col))) {
     cli::cli_abort(
@@ -79,7 +114,8 @@ ocsai <- function(df, item, answer, model = c("1.6", "1-4o", "davinci3", "chatgp
     )
   }
 
-  model <- switch(model,
+  model <- switch(
+    model,
     "1.6" = "ocsai-1.6",
     "1-4o" = "ocsai1-4o",
     "1.5" = "ocsai-1.5",
@@ -90,7 +126,10 @@ ocsai <- function(df, item, answer, model = c("1.6", "1-4o", "davinci3", "chatgp
     davinci2 = "ocsai-davinci2"
   )
 
-  df <- split(df, ceiling(seq_along(df[[rlang::as_label(answer_col)]]) / chunk_size)) # break into 50-row chunks
+  df <- split(
+    df,
+    ceiling(seq_along(df[[rlang::as_label(answer_col)]]) / chunk_size)
+  ) # break into 50-row chunks
 
   purrr::map(
     df,
@@ -138,7 +177,14 @@ ocsai <- function(df, item, answer, model = c("1.6", "1-4o", "davinci3", "chatgp
         query = query
       )
 
-      if ((res$status_code == 400 & any(stringr::str_detect(rawToChar(res$content), "Request Line is too large"))) | res$status_code == 414) {
+      if (
+        (res$status_code == 400 &
+          any(stringr::str_detect(
+            rawToChar(res$content),
+            "Request Line is too large"
+          ))) |
+          res$status_code == 414
+      ) {
         if (chunk_size == 1) {
           print(df)
           cli::cli_abort(
@@ -150,16 +196,48 @@ ocsai <- function(df, item, answer, model = c("1.6", "1-4o", "davinci3", "chatgp
         }
         temp_size <- ifelse(chunk_size > 10, 10, 1)
         if (is.null(question)) {
-          temp <- ocsai(df, !!item_col, !!answer_col, model = stringr::str_remove(model, "ocsai-?"), language = language, scores_col = "scores", quiet = TRUE, chunk_size = temp_size, task = task, short_prompt = short_prompt)
+          temp <- ocsai(
+            df,
+            !!item_col,
+            !!answer_col,
+            model = stringr::str_remove(model, "ocsai-?"),
+            language = language,
+            scores_col = "scores",
+            quiet = TRUE,
+            chunk_size = temp_size,
+            task = task,
+            short_prompt = short_prompt
+          )
         } else {
-          temp <- ocsai(df, NULL, !!answer_col, model = stringr::str_remove(model, "ocsai-?"), language = language, scores_col = "scores", quiet = TRUE, chunk_size = temp_size, question = question, task = task, short_prompt = short_prompt)
+          temp <- ocsai(
+            df,
+            NULL,
+            !!answer_col,
+            model = stringr::str_remove(model, "ocsai-?"),
+            language = language,
+            scores_col = "scores",
+            quiet = TRUE,
+            chunk_size = temp_size,
+            question = question,
+            task = task,
+            short_prompt = short_prompt
+          )
         }
         df[[scores_col]] <- temp$scores
       } else if (res$status_code != 200) {
-        cli::cli_inform(c("!" = "The database possibly contains false {.code NA} values due to a server error", "i" = "Check your internet connection and consider rerunning the {.fn ocsai} fucntion call", " " = "OpenScoring API returned status code {res$status_code}", " " = "{res}"))
+        cli::cli_inform(c(
+          "!" = "The database possibly contains false {.code NA} values due to a server error",
+          "i" = "Check your internet connection and consider rerunning the {.fn ocsai} fucntion call",
+          " " = "OpenScoring API returned status code {res$status_code}",
+          " " = "{res}"
+        ))
         df[[scores_col]] <- NA
       } else {
-        content <- jsonlite::fromJSON(stringr::str_replace_all(rawToChar(res$content), "NaN", "\"NA\""))
+        content <- jsonlite::fromJSON(stringr::str_replace_all(
+          rawToChar(res$content),
+          "NaN",
+          "\"NA\""
+        ))
         df[[scores_col]] <- content$scores$originality
       }
       return(df)
