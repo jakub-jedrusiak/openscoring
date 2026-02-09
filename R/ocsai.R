@@ -240,6 +240,7 @@ ocsai <- function(
         ))
         df[[scores_col]] <- content$scores$originality
       }
+      df[[scores_col]][df[[rlang::as_label(answer_col)]] == ""] <- NA
       return(df)
     },
     .progress = !quiet

@@ -1,3 +1,7 @@
+# openscoring dev
+
+* Empty strings now have NA score instead of 1.
+
 # openscoring 1.0.5
 
 * Renamed `oscai()` to `ocsai()` (how I didn't notice this earlier still puzzles me)
