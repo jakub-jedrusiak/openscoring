@@ -1,4 +1,4 @@
-# openscoring dev
+# openscoring 1.0.6
 
 * Empty strings now have NA score instead of 1.
 
