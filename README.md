@@ -42,7 +42,11 @@ library(openscoring)
 
 df <- tibble::tibble(
   stimulus = c("brick", "hammer", "sponge"),
-  response = c("butter for trolls", "make Thor jealous", "make it play in a kids show")
+  response = c(
+    "butter for trolls",
+    "make Thor jealous",
+    "make it play in a kids show"
+  )
 )
 
 df
@@ -53,30 +57,34 @@ df
 #> 2 hammer   make Thor jealous          
 #> 3 sponge   make it play in a kids show
 
-scored_df <- ocsai(df, stimulus, response, model = "chatgpt2")
+scored_df <- ocsai(df, stimulus, response, model = "2-xs")
 
 scored_df
 #> # A tibble: 3 × 3
 #>   stimulus response                    .originality
 #>   <chr>    <chr>                              <dbl>
-#> 1 brick    butter for trolls                    3  
+#> 1 brick    butter for trolls                    2  
 #> 2 hammer   make Thor jealous                    3.5
-#> 3 sponge   make it play in a kids show          3.3
+#> 3 sponge   make it play in a kids show          3
 ```
 
 The `"1.5"` model works for multiple languages:
 
 ``` r
 df_polish <- tibble::tibble(
- stimulus = c("cegła", "młotek", "gąbka"),
-  response = c("masło dla trolli", "wywoływanie zazdrości u Thora", "postać w programie dla dzieci")
+  stimulus = c("cegła", "młotek", "gąbka"),
+  response = c(
+    "masło dla trolli",
+    "wywoływanie zazdrości u Thora",
+    "postać w programie dla dzieci"
+  )
 )
 
-ocsai(df_polish, stimulus, response, model = "1.5", language = "Polish")
+ocsai(df_polish, stimulus, response, model = "2", language = "Polish")
 #> # A tibble: 3 × 3
 #>   stimulus response                      .originality
 #>   <chr>    <chr>                                <dbl>
-#> 1 cegła    masło dla trolli                       2.3
-#> 2 młotek   wywoływanie zazdrości u Thora          3.7
-#> 3 gąbka    postać w programie dla dzieci          2.3
+#> 1 cegła    masło dla trolli                       2.6
+#> 2 młotek   wywoływanie zazdrości u Thora          3  
+#> 3 gąbka    postać w programie dla dzieci          3
 ```

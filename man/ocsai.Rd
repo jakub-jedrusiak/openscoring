@@ -8,12 +8,12 @@ ocsai(
   df,
   item,
   answer,
-  model = c("1.6", "1-4o", "davinci3", "chatgpt2", "1.5", "chatgpt", "babbage2",
-    "davinci2"),
+  model = c("2", "2-xs", "1.6", "1-4o", "davinci3", "chatgpt2", "1.5", "chatgpt",
+    "babbage2", "davinci2"),
   language = "English",
   scores_col = ".originality",
   quiet = FALSE,
-  chunk_size = 50,
+  chunk_size = 25,
   task = "uses",
   short_prompt = TRUE,
   question = NULL
@@ -26,7 +26,7 @@ ocsai(
 
 \item{answer}{The column name of the responses. Commas will be replaced with spaces for scoring.}
 
-\item{model}{The model to use. Should be one of "1.6", "1-4o", "davinci3", "chatgpt2". Deprecated models are kept for compatibility.}
+\item{model}{The model to use. Should be one of "2" or "2-xs". Deprecated models are kept for compatibility.}
 
 \item{language}{The language of the input. Only works for the 1.5 model upwards. Should be one of "Arabic", "Chinese", "Dutch", "English", "French", "German", "Hebrew", "Italian", "Polish", "Russian", "Spanish".}
 
@@ -34,7 +34,7 @@ ocsai(
 
 \item{quiet}{Whether to print the citation reminder.}
 
-\item{chunk_size}{The number of rows to send to the API at once. Defaults to 50. If a request is too large, it will be split into 10-row chunks.}
+\item{chunk_size}{The number of rows to send to the API at once. Defaults to 25. If a request is too large, it will be split into 10-row chunks.}
 
 \item{task}{The name of the task to be scored. Can be "uses" (default), "completion", "consequences", "instances" or "metaphors".}
 
@@ -53,6 +53,8 @@ for more information. Requires an internet connection.
 \details{
 Available models:
 \itemize{
+\item ocsai2: Cross-lingual originality scoring model. Trained with cluster-based deduplication to score semantically equivalent responses the same across languages. GPT-4.1-mini base.
+\item ocsai2-xs: Smaller, faster version of Ocsai 2. Same cross-lingual training approach as ocsai2, with GPT-4.1-nano base for lower latency and cost.
 \item ocsai-1.6: Update to the multi-lingual, multi-task 1.5 model, trained on GPT 4o instead of 3.5.
 \item ocsai1-4o: GPT-4o-based model, trained with more data and supporting multiple tasks. Last update to the Ocsai 1 models (i.e. the original ones).
 \item ocsai-chatgpt2: GPT-3.5-size chat-based model, trained with more data and supporting multiple tasks. Scoring is slower, with slightly better performance than ocsai-davinci.
@@ -77,6 +79,6 @@ df_polish <- data.frame(
   response = c("masło dla trolli", "wywoływanie zazdrości u Thora", "postać w programie dla dzieci")
 )
 
-df_polish <- ocsai(df_polish, stimulus, response, model = "1.5", language = "Polish")
+df_polish <- ocsai(df_polish, stimulus, response, model = "2", language = "Polish")
 
 }

@@ -8,11 +8,11 @@
 #' @param df A data frame.
 #' @param item The column name of the items or other kind of prompt.
 #' @param answer The column name of the responses. Commas will be replaced with spaces for scoring.
-#' @param model The model to use. Should be one of "1.6", "1-4o", "davinci3", "chatgpt2". Deprecated models are kept for compatibility.
+#' @param model The model to use. Should be one of "2" or "2-xs". Deprecated models are kept for compatibility.
 #' @param language The language of the input. Only works for the 1.5 model upwards. Should be one of "Arabic", "Chinese", "Dutch", "English", "French", "German", "Hebrew", "Italian", "Polish", "Russian", "Spanish".
 #' @param scores_col The column name to store the scores in. Defaults to ".originality".
 #' @param quiet Whether to print the citation reminder.
-#' @param chunk_size The number of rows to send to the API at once. Defaults to 50. If a request is too large, it will be split into 10-row chunks.
+#' @param chunk_size The number of rows to send to the API at once. Defaults to 25. If a request is too large, it will be split into 10-row chunks.
 #' @param task The name of the task to be scored. Can be "uses" (default), "completion", "consequences", "instances" or "metaphors".
 #' @param short_prompt Whether the prompt is a short prompt (`TRUE`) or a full question (`FALSE`). Defaults to `TRUE`.
 #' @param question You can set this arg instead of providing the `item` column.
@@ -33,10 +33,12 @@
 #'   response = c("masło dla trolli", "wywoływanie zazdrości u Thora", "postać w programie dla dzieci")
 #' )
 #'
-#' df_polish <- ocsai(df_polish, stimulus, response, model = "1.5", language = "Polish")
+#' df_polish <- ocsai(df_polish, stimulus, response, model = "2", language = "Polish")
 #'
 #' @details
 #' Available models:
+#' * ocsai2: Cross-lingual originality scoring model. Trained with cluster-based deduplication to score semantically equivalent responses the same across languages. GPT-4.1-mini base.
+#' * ocsai2-xs: Smaller, faster version of Ocsai 2. Same cross-lingual training approach as ocsai2, with GPT-4.1-nano base for lower latency and cost.
 #' * ocsai-1.6: Update to the multi-lingual, multi-task 1.5 model, trained on GPT 4o instead of 3.5.
 #' * ocsai1-4o: GPT-4o-based model, trained with more data and supporting multiple tasks. Last update to the Ocsai 1 models (i.e. the original ones).
 #' * ocsai-chatgpt2: GPT-3.5-size chat-based model, trained with more data and supporting multiple tasks. Scoring is slower, with slightly better performance than ocsai-davinci.
@@ -53,6 +55,8 @@ ocsai <- function(
   item,
   answer,
   model = c(
+    "2",
+    "2-xs",
     "1.6",
     "1-4o",
     "davinci3",
@@ -65,7 +69,7 @@ ocsai <- function(
   language = "English",
   scores_col = ".originality",
   quiet = FALSE,
-  chunk_size = 50,
+  chunk_size = 25,
   task = "uses",
   short_prompt = TRUE,
   question = NULL
@@ -115,7 +119,9 @@ ocsai <- function(
   }
 
   model <- switch(
-    model,
+    as.character(model),
+    "2" = "ocsai2",
+    "2-xs" = "ocsai2-xs",
     "1.6" = "ocsai-1.6",
     "1-4o" = "ocsai1-4o",
     "1.5" = "ocsai-1.5",
@@ -129,7 +135,7 @@ ocsai <- function(
   df <- split(
     df,
     ceiling(seq_along(df[[rlang::as_label(answer_col)]]) / chunk_size)
-  ) # break into 50-row chunks
+  ) # break into chunks
 
   purrr::map(
     df,
