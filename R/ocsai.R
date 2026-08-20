@@ -95,6 +95,19 @@ ocsai <- function(
       "Spanish"
     )
   )
+  language_code <- c(
+    Arabic = "ara",
+    Chinese = "chi",
+    Dutch = "dut",
+    English = "eng",
+    French = "fre",
+    German = "ger",
+    Hebrew = "heb",
+    Italian = "ita",
+    Polish = "pol",
+    Russian = "rus",
+    Spanish = "spa"
+  )[[language]]
   # task <- rlang::arg_match0(task, values = c("uses", "completion", "consequences", "instances", "metaphors"))
   short_prompt <- as.logical(short_prompt)
 
@@ -118,10 +131,11 @@ ocsai <- function(
     )
   }
 
+  model_alias <- as.character(model)
   model <- switch(
-    as.character(model),
+    model_alias,
     "2" = "ocsai2",
-    "2-xs" = "ocsai2-xs",
+    "2-xs" = "ocsai2-paper-xs",
     "1.6" = "ocsai-1.6",
     "1-4o" = "ocsai1-4o",
     "1.5" = "ocsai-1.5",
@@ -155,20 +169,24 @@ ocsai <- function(
         query <- list(
           model = model,
           input = input,
-          language = language,
+          language = language_code,
           task = task,
           prompt_in_input = short_prompt,
-          question_in_input = !short_prompt
+          question_in_input = !short_prompt,
+          elab_method = "none",
+          logprob_scoring = TRUE
         )
       } else {
         input <- paste0('"', answer, '"', collapse = "\n")
         query <- list(
           model = model,
           input = input,
-          language = language,
+          language = language_code,
           task = task,
           prompt_in_input = FALSE,
-          question_in_input = FALSE
+          question_in_input = FALSE,
+          elab_method = "none",
+          logprob_scoring = TRUE
         )
         if (short_prompt) {
           query$prompt <- question
@@ -179,8 +197,9 @@ ocsai <- function(
 
       res <- httr::POST(
         "https://openscoring.du.edu/llm",
-        httr::config(ssl_verifypeer = 0),
-        query = query
+        httr::config(ssl_verifypeer = FALSE),
+        body = query,
+        encode = "form"
       )
 
       if (
@@ -206,7 +225,7 @@ ocsai <- function(
             df,
             !!item_col,
             !!answer_col,
-            model = stringr::str_remove(model, "ocsai-?"),
+            model = model_alias,
             language = language,
             scores_col = "scores",
             quiet = TRUE,
@@ -219,7 +238,7 @@ ocsai <- function(
             df,
             NULL,
             !!answer_col,
-            model = stringr::str_remove(model, "ocsai-?"),
+            model = model_alias,
             language = language,
             scores_col = "scores",
             quiet = TRUE,
