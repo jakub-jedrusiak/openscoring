@@ -1,3 +1,7 @@
+# openscoring future
+
+* Update API calls to the new format (payload instead of query)
+
 # openscoring 1.1.0
 
 * Added `ocsai2` and `ocsai2-xs`
