@@ -16,6 +16,8 @@
 #' @param task The name of the task to be scored. Can be "uses" (default), "completion", "consequences", "instances" or "metaphors".
 #' @param short_prompt Whether the prompt is a short prompt (`TRUE`) or a full question (`FALSE`). Defaults to `TRUE`.
 #' @param question You can set this arg instead of providing the `item` column.
+#' @param api_key Optional OpenScoring API key sent in the `X-API-KEY` header.
+#'   Defaults to `NULL` (no key).
 #'
 #' @return The input data frame with the scores added.
 #'
@@ -72,7 +74,8 @@ ocsai <- function(
   chunk_size = 25,
   task = "uses",
   short_prompt = TRUE,
-  question = NULL
+  question = NULL,
+  api_key = NULL
 ) {
   if (is.null(question)) {
     item_col <- rlang::ensym(item)
@@ -110,6 +113,16 @@ ocsai <- function(
   )[[language]]
   # task <- rlang::arg_match0(task, values = c("uses", "completion", "consequences", "instances", "metaphors"))
   short_prompt <- as.logical(short_prompt)
+  if (!is.null(api_key)) {
+    api_key <- as.character(api_key)
+    if (length(api_key) != 1) {
+      cli::cli_abort("{.arg api_key} must be a single string or {.code NULL}.")
+    }
+    api_key <- stringr::str_trim(api_key)
+    if (identical(api_key, "")) {
+      api_key <- NULL
+    }
+  }
 
   if (is.null(question) && !rlang::has_name(df, rlang::as_name(item_col))) {
     cli::cli_abort(
@@ -195,19 +208,29 @@ ocsai <- function(
         }
       }
 
-      res <- httr::POST(
-        "https://openscoring.du.edu/llm",
-        httr::config(ssl_verifypeer = FALSE),
-        body = query,
-        encode = "form"
-      )
+      if (is.null(api_key)) {
+        res <- httr::POST(
+          "https://openscoring.du.edu/llm",
+          httr::config(ssl_verifypeer = FALSE),
+          body = query,
+          encode = "form"
+        )
+      } else {
+        res <- httr::POST(
+          "https://openscoring.du.edu/llm",
+          httr::config(ssl_verifypeer = FALSE),
+          httr::add_headers("X-API-KEY" = api_key),
+          body = query,
+          encode = "form"
+        )
+      }
 
       if (
-        (res$status_code == 400 &
+        (res$status_code == 400 &&
           any(stringr::str_detect(
             rawToChar(res$content),
             "Request Line is too large"
-          ))) |
+          ))) ||
           res$status_code == 414
       ) {
         if (chunk_size == 1) {
@@ -231,7 +254,8 @@ ocsai <- function(
             quiet = TRUE,
             chunk_size = temp_size,
             task = task,
-            short_prompt = short_prompt
+            short_prompt = short_prompt,
+            api_key = api_key
           )
         } else {
           temp <- ocsai(
@@ -245,7 +269,8 @@ ocsai <- function(
             chunk_size = temp_size,
             question = question,
             task = task,
-            short_prompt = short_prompt
+            short_prompt = short_prompt,
+            api_key = api_key
           )
         }
         df[[scores_col]] <- temp$scores

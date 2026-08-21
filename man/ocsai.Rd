@@ -16,7 +16,8 @@ ocsai(
   chunk_size = 25,
   task = "uses",
   short_prompt = TRUE,
-  question = NULL
+  question = NULL,
+  api_key = NULL
 )
 }
 \arguments{
@@ -41,6 +42,9 @@ ocsai(
 \item{short_prompt}{Whether the prompt is a short prompt (\code{TRUE}) or a full question (\code{FALSE}). Defaults to \code{TRUE}.}
 
 \item{question}{You can set this arg instead of providing the \code{item} column.}
+
+\item{api_key}{Optional OpenScoring API key sent in the \code{X-API-KEY} header.
+Defaults to \code{NULL} (no key).}
 }
 \value{
 The input data frame with the scores added.

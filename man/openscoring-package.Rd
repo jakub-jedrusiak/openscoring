@@ -17,15 +17,20 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Jakub Jędrusiak \email{jakub.jedrusiak2@uwr.edu.pl} (\href{https://orcid.org/0000-0002-6481-8210}{ORCID}) (University of Wroclaw) [copyright holder]
+\strong{Maintainer}: Jakub Jędrusiak \email{jakub.jedrusiak2@uwr.edu.pl} (\href{https://orcid.org/0000-0002-6481-8210}{ORCID}) (affiliation: University of Wroclaw) [copyright holder]
+
+Authors:
+\itemize{
+  \item Jakub Jędrusiak \email{jakub.jedrusiak2@uwr.edu.pl} (\href{https://orcid.org/0000-0002-6481-8210}{ORCID}) (affiliation: University of Wroclaw) [copyright holder]
+}
 
 Other contributors:
 \itemize{
-  \item Peter Organisciak \email{peter.organisciak@du.edu} (\href{https://orcid.org/0000-0002-9058-2280}{ORCID}) (University of Denver) [contributor]
-  \item Selcuk Acar (\href{https://orcid.org/0000-0003-4044-985X}{ORCID}) (University of North Texas) [contributor]
-  \item Denis Dumas (\href{https://orcid.org/0000-0002-8446-4720}{ORCID}) (University of Georgia) [contributor]
-  \item Pier-Luc de Chantal (\href{https://orcid.org/0000-0002-6974-6172}{ORCID}) (Université du Québec à Montréal) [contributor]
-  \item Kelly Berthiaume (\href{https://orcid.org/0000-0002-5285-0512}{ORCID}) (University of North Texas) [contributor]
+  \item Peter Organisciak \email{peter.organisciak@du.edu} (\href{https://orcid.org/0000-0002-9058-2280}{ORCID}) (affiliation: University of Denver) [contributor]
+  \item Selcuk Acar (\href{https://orcid.org/0000-0003-4044-985X}{ORCID}) (affiliation: University of North Texas) [contributor]
+  \item Denis Dumas (\href{https://orcid.org/0000-0002-8446-4720}{ORCID}) (affiliation: University of Georgia) [contributor]
+  \item Pier-Luc de Chantal (\href{https://orcid.org/0000-0002-6974-6172}{ORCID}) (affiliation: Université du Québec à Montréal) [contributor]
+  \item Kelly Berthiaume (\href{https://orcid.org/0000-0002-5285-0512}{ORCID}) (affiliation: University of North Texas) [contributor]
 }
 
 }

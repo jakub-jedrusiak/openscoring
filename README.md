@@ -63,9 +63,9 @@ scored_df
 #> # A tibble: 3 × 3
 #>   stimulus response                    .originality
 #>   <chr>    <chr>                              <dbl>
-#> 1 brick    butter for trolls                    2  
-#> 2 hammer   make Thor jealous                    3.5
-#> 3 sponge   make it play in a kids show          3
+#> 1 brick    butter for trolls                   2.5 
+#> 2 hammer   make Thor jealous                   3.34
+#> 3 sponge   make it play in a kids show         2.97
 ```
 
 The `"1.5"` model works for multiple languages:
@@ -84,7 +84,26 @@ ocsai(df_polish, stimulus, response, model = "2", language = "Polish")
 #> # A tibble: 3 × 3
 #>   stimulus response                      .originality
 #>   <chr>    <chr>                                <dbl>
-#> 1 cegła    masło dla trolli                       2.6
-#> 2 młotek   wywoływanie zazdrości u Thora          3  
-#> 3 gąbka    postać w programie dla dzieci          3
+#> 1 cegła    masło dla trolli                      2.55
+#> 2 młotek   wywoływanie zazdrości u Thora         3.08
+#> 3 gąbka    postać w programie dla dzieci         3.21
 ```
+
+## API key
+
+The API works without authentication for moderate usage. To increase
+rate limits, pass your key with the `api_key` argument (it is sent as
+the `X-API-KEY` header):
+
+``` r
+ocsai(
+  df,
+  stimulus,
+  response,
+  model = "2",
+  api_key = Sys.getenv("OPENSCORING_API_KEY")
+)
+```
+
+For safety, keep keys out of scripts and set them as environment
+variables.

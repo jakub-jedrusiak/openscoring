@@ -73,3 +73,20 @@ df_polish <- tibble::tibble(
 
 ocsai(df_polish, stimulus, response, model = "2", language = "Polish")
 ```
+
+## API key
+
+The API works without authentication for moderate usage. To increase rate limits,
+pass your key with the `api_key` argument (it is sent as the `X-API-KEY` header):
+
+```{r api-key, eval = FALSE}
+ocsai(
+  df,
+  stimulus,
+  response,
+  model = "2",
+  api_key = Sys.getenv("OPENSCORING_API_KEY")
+)
+```
+
+For safety, keep keys out of scripts and set them as environment variables.
