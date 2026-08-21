@@ -31,8 +31,8 @@ You can install the development version of openscoring from
 [GitHub](https://github.com/) with:
 
 ``` r
-# install.packages("devtools")
-devtools::install_github("jakub-jedrusiak/openscoring")
+# install.packages("pak")
+pak::pak("jakub-jedrusiak/openscoring")
 ```
 
 ## Example
