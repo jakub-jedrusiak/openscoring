@@ -1,8 +1,9 @@
 # openscoring future
 
 * Update API calls to the new format (payload instead of query)
-* Add API key argument.
-* Added the logprob scoring.
+* Add API key argument
+* Added the logprob scoring
+* The default chunk size is now 25
 
 # openscoring 1.1.0
 
