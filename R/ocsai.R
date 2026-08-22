@@ -74,7 +74,7 @@ ocsai <- function(
   language = "English",
   scores_col = ".originality",
   quiet = FALSE,
-  chunk_size = 25,
+  chunk_size = 50,
   task = "uses",
   short_prompt = TRUE,
   question = NULL,
