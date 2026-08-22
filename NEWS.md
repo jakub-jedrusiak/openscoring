@@ -2,6 +2,7 @@
 
 * Update API calls to the new format (payload instead of query)
 * Add API key argument.
+* Added the logprob scoring.
 
 # openscoring 1.1.0
 

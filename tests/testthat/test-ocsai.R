@@ -46,3 +46,32 @@ test_that("question arg works", {
     quiet = TRUE
   ))
 })
+
+test_that("logprob_scoring adds a confidence column", {
+  res <- ocsai(df, stimulus, response, model = "2", quiet = TRUE)
+  expect_true(".confidence" %in% names(res))
+})
+
+test_that("logprob_scoring = FALSE omits the confidence column", {
+  res <- ocsai(
+    df,
+    stimulus,
+    response,
+    model = "2",
+    quiet = TRUE,
+    logprob_scoring = FALSE
+  )
+  expect_false(".confidence" %in% names(res))
+})
+
+test_that("confidence_col renames the confidence column", {
+  res <- ocsai(
+    df,
+    stimulus,
+    response,
+    model = "2",
+    quiet = TRUE,
+    confidence_col = "conf"
+  )
+  expect_true("conf" %in% names(res))
+})

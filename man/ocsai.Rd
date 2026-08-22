@@ -17,7 +17,9 @@ ocsai(
   task = "uses",
   short_prompt = TRUE,
   question = NULL,
-  api_key = NULL
+  api_key = NULL,
+  logprob_scoring = TRUE,
+  confidence_col = ".confidence"
 )
 }
 \arguments{
@@ -45,6 +47,11 @@ ocsai(
 
 \item{api_key}{Optional OpenScoring API key sent in the \code{X-API-KEY} header.
 Defaults to \code{NULL} (no key).}
+
+\item{logprob_scoring}{When true, return a weighted-average score using the top OpenAI logprobs (more stable than the single top-token score),
+along with a confidence value. Defaults to \code{TRUE}. Ignored (forced off) for the "1.5" model.}
+
+\item{confidence_col}{The column name to store the confidence values in when \code{logprob_scoring} is \code{TRUE}. Defaults to ".confidence".}
 }
 \value{
 The input data frame with the scores added.

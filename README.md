@@ -60,12 +60,12 @@ df
 scored_df <- ocsai(df, stimulus, response, model = "2-xs")
 
 scored_df
-#> # A tibble: 3 × 3
-#>   stimulus response                    .originality
-#>   <chr>    <chr>                              <dbl>
-#> 1 brick    butter for trolls                   2.5 
-#> 2 hammer   make Thor jealous                   3.34
-#> 3 sponge   make it play in a kids show         2.97
+#> # A tibble: 3 × 4
+#>   stimulus response                    .originality .confidence
+#>   <chr>    <chr>                              <dbl>       <dbl>
+#> 1 brick    butter for trolls                   2.5         0.49
+#> 2 hammer   make Thor jealous                   3.34        0.47
+#> 3 sponge   make it play in a kids show         2.97        0.48
 ```
 
 The `"1.5"` model works for multiple languages:
@@ -81,12 +81,28 @@ df_polish <- tibble::tibble(
 )
 
 ocsai(df_polish, stimulus, response, model = "2", language = "Polish")
-#> # A tibble: 3 × 3
-#>   stimulus response                      .originality
-#>   <chr>    <chr>                                <dbl>
-#> 1 cegła    masło dla trolli                      2.55
-#> 2 młotek   wywoływanie zazdrości u Thora         3.08
-#> 3 gąbka    postać w programie dla dzieci         3.21
+#> # A tibble: 3 × 4
+#>   stimulus response                      .originality .confidence
+#>   <chr>    <chr>                                <dbl>       <dbl>
+#> 1 cegła    masło dla trolli                      2.55        0.54
+#> 2 młotek   wywoływanie zazdrości u Thora         3.08        0.84
+#> 3 gąbka    postać w programie dla dzieci         3.21        0.62
+```
+
+## Confidence scores
+
+By default, `logprob_scoring` is `TRUE`, which adds a `.confidence`
+column alongside the originality scores. Set `logprob_scoring = FALSE`
+to disable it, or rename the column with `confidence_col`:
+
+``` r
+ocsai(df, stimulus, response, model = "2-xs", confidence_col = "confidence")
+#> # A tibble: 3 × 4
+#>   stimulus response                    .originality confidence
+#>   <chr>    <chr>                              <dbl>      <dbl>
+#> 1 brick    butter for trolls                   2.5        0.49
+#> 2 hammer   make Thor jealous                   3.34       0.47
+#> 3 sponge   make it play in a kids show         2.97       0.48
 ```
 
 ## API key

@@ -74,6 +74,16 @@ df_polish <- tibble::tibble(
 ocsai(df_polish, stimulus, response, model = "2", language = "Polish")
 ```
 
+## Confidence scores
+
+By default, `logprob_scoring` is `TRUE`, which adds a `.confidence` column
+alongside the originality scores. Set `logprob_scoring = FALSE` to disable it,
+or rename the column with `confidence_col`:
+
+```{r example3}
+ocsai(df, stimulus, response, model = "2-xs", confidence_col = "confidence")
+```
+
 ## API key
 
 The API works without authentication for moderate usage. To increase rate limits,

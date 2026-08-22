@@ -18,6 +18,9 @@
 #' @param question You can set this arg instead of providing the `item` column.
 #' @param api_key Optional OpenScoring API key sent in the `X-API-KEY` header.
 #'   Defaults to `NULL` (no key).
+#' @param logprob_scoring When true, return a weighted-average score using the top OpenAI logprobs (more stable than the single top-token score),
+#'   along with a confidence value. Defaults to `TRUE`. Ignored (forced off) for the "1.5" model.
+#' @param confidence_col The column name to store the confidence values in when `logprob_scoring` is `TRUE`. Defaults to ".confidence".
 #'
 #' @return The input data frame with the scores added.
 #'
@@ -75,7 +78,9 @@ ocsai <- function(
   task = "uses",
   short_prompt = TRUE,
   question = NULL,
-  api_key = NULL
+  api_key = NULL,
+  logprob_scoring = TRUE,
+  confidence_col = ".confidence"
 ) {
   if (is.null(question)) {
     item_col <- rlang::ensym(item)
@@ -113,6 +118,7 @@ ocsai <- function(
   )[[language]]
   # task <- rlang::arg_match0(task, values = c("uses", "completion", "consequences", "instances", "metaphors"))
   short_prompt <- as.logical(short_prompt)
+  logprob_scoring <- as.logical(logprob_scoring)
   if (!is.null(api_key)) {
     api_key <- as.character(api_key)
     if (length(api_key) != 1) {
@@ -187,7 +193,7 @@ ocsai <- function(
           prompt_in_input = short_prompt,
           question_in_input = !short_prompt,
           elab_method = "none",
-          logprob_scoring = TRUE
+          logprob_scoring = logprob_scoring
         )
       } else {
         input <- paste0('"', answer, '"', collapse = "\n")
@@ -199,7 +205,7 @@ ocsai <- function(
           prompt_in_input = FALSE,
           question_in_input = FALSE,
           elab_method = "none",
-          logprob_scoring = TRUE
+          logprob_scoring = logprob_scoring
         )
         if (short_prompt) {
           query$prompt <- question
@@ -255,7 +261,9 @@ ocsai <- function(
             chunk_size = temp_size,
             task = task,
             short_prompt = short_prompt,
-            api_key = api_key
+            api_key = api_key,
+            logprob_scoring = logprob_scoring,
+            confidence_col = "confidence"
           )
         } else {
           temp <- ocsai(
@@ -270,10 +278,15 @@ ocsai <- function(
             question = question,
             task = task,
             short_prompt = short_prompt,
-            api_key = api_key
+            api_key = api_key,
+            logprob_scoring = logprob_scoring,
+            confidence_col = "confidence"
           )
         }
         df[[scores_col]] <- temp$scores
+        if (logprob_scoring) {
+          df[[confidence_col]] <- temp$confidence
+        }
       } else if (res$status_code != 200) {
         cli::cli_inform(c(
           "!" = "The database possibly contains false {.code NA} values due to a server error",
@@ -282,6 +295,9 @@ ocsai <- function(
           " " = "{res}"
         ))
         df[[scores_col]] <- NA
+        if (logprob_scoring) {
+          df[[confidence_col]] <- NA
+        }
       } else {
         content <- jsonlite::fromJSON(stringr::str_replace_all(
           rawToChar(res$content),
@@ -289,8 +305,14 @@ ocsai <- function(
           "\"NA\""
         ))
         df[[scores_col]] <- content$scores$originality
+        if (logprob_scoring) {
+          df[[confidence_col]] <- content$scores$confidence
+        }
       }
       df[[scores_col]][df[[rlang::as_label(answer_col)]] == ""] <- NA
+      if (logprob_scoring) {
+        df[[confidence_col]][df[[rlang::as_label(answer_col)]] == ""] <- NA
+      }
       return(df)
     },
     .progress = !quiet
