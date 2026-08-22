@@ -1,4 +1,4 @@
-# openscoring future
+# openscoring 1.2.0
 
 * Update API calls to the new format (payload instead of query)
 * Add API key argument
